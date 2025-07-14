@@ -11,6 +11,8 @@ If you're not very technical, don't worry! You can edit the template files using
 - **Python 3**: You need Python 3 installed on your computer. Download it from [python.org](https://www.python.org/downloads/) if you don't have it. (The program uses Python 3.13, but any Python 3 version should work.)
 - **No extra installations needed**: The program uses built-in Python features, so no additional libraries are required.
 - **A text editor or spreadsheet app**: For editing the CSV templates.
+- **CPS Version**: Currently based on CPS Version 3.06 and above channel creation.
+  - Some tweaks to the channel output may be necessary for import into older CPS versions.
 
 ## How to Run the Program
 
