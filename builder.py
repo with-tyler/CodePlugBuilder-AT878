@@ -51,6 +51,7 @@ SCANLIST_LIMIT = 50  # Maximum channels per scanlist
 global_sort_mode = 'alpha'
 global_hotspot_tx_permit = 'same-color-code'
 global_nickname_mode = 'off'
+global_talkgroup_sort = 'input'
 global_line_number = 0
 global_file_name = 'none'
 global_channel_number = 1
@@ -124,13 +125,21 @@ def write_talkgroup_file(filename):
     with open(filename, 'w', newline='', encoding='utf-8') as fh:
         csv_out = csv.writer(fh, quoting=csv.QUOTE_ALL, lineterminator='\r\n')
         csv_out.writerow(headers)
-        row_num = 1
+        talkgroups = []
         for row in all_talkgroups[1:]:  # Skip header row
             radio_id = row[0].strip()
             name = row[1].strip()
             call_type = row[2].strip() if len(row) > 2 and row[2].strip() else "Group Call"
             call_alert = row[3].strip() if len(row) > 3 and row[3].strip() else "None"
-            csv_out.writerow([row_num, radio_id, name, "", "", call_type, call_alert])
+            talkgroups.append((radio_id, name, call_type, call_alert))
+        if global_talkgroup_sort == 'id':
+            talkgroups.sort(key=lambda x: int(x[0]))
+        elif global_talkgroup_sort == 'name':
+            talkgroups.sort(key=lambda x: x[1].lower())
+        # else: 'input', keep original order
+        row_num = 1
+        for tg in talkgroups:
+            csv_out.writerow([row_num, tg[0], tg[1], "", "", tg[2], tg[3]])
             row_num += 1
 
 def write_radio_id_list(dmr_id, output_dir):
@@ -565,6 +574,10 @@ def validate_nickname_mode(nickname_mode):
     valid_modes = {"off", "prefix", "suffix", "prefix-forced", "suffix-forced"}
     return _validate_membership(nickname_mode, valid_modes, "Nickname Mode")
 
+def validate_talkgroup_sort(sort_mode):
+    valid_modes = {"input", "id", "name"}
+    return _validate_membership(sort_mode, valid_modes, "Talkgroup Sort")
+
 # Validation Helpers
 def _validate_membership(value, valid_set, error_type):
     if value not in valid_set:
@@ -669,6 +682,16 @@ def handle_command_line_args():
         help='Nickname mode for channel names. Default: off'
     )
     parser.add_argument(
+        '--talkgroup-sort',
+        default='input',
+        choices=['input', 'id', 'name'],
+        help='Talkgroup sorting mode:\n'
+             '  input: Keep the order from the input file.\n'
+             '  id: Sort by TGID (Radio ID) numerically.\n'
+             '  name: Sort by Talkgroup Name alphabetically (case-insensitive).\n'
+             'Default: input'
+    )
+    parser.add_argument(
         '--generate-templates',
         action='store_true',
         help='Generate empty CSV templates with headers in ./Templates and exit.\n'
@@ -689,10 +712,11 @@ def handle_command_line_args():
             parser.error("All input CSV files (--analog-csv, --digital-others-csv, --digital-repeaters-csv, --talkgroups-csv) "
                          "are required unless --generate-templates is used.")
 
-    global global_sort_mode, global_hotspot_tx_permit, global_nickname_mode
+    global global_sort_mode, global_hotspot_tx_permit, global_nickname_mode, global_talkgroup_sort
     global_sort_mode = validate_sort_mode(args.sorting)
     global_hotspot_tx_permit = validate_hotspot_mode(args.hotspot_tx_permit)
     global_nickname_mode = validate_nickname_mode(args.nicknames)
+    global_talkgroup_sort = validate_talkgroup_sort(args.talkgroup_sort)
     return args
 
 def generate_templates(templates_dir):

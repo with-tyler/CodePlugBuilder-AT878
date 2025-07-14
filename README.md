@@ -170,6 +170,10 @@ Run `python builder.py --help` for a list. Required unless generating templates:
   - 'prefix-forced': Force prefix, use short talkgroup name if needed.
   - 'suffix-forced': Force suffix.
   - This helps with long names (limited to 16 chars).
+- `--talkgroup-sort` (default: input):
+  - 'input': Keep the order from the input files.
+  - 'id': Sort by TGID (RadioID) numerically.
+  - 'name': Sort by Talkgroup Name Alphabetically (case-insensitive).
 - `--generate-templates`: Create blank templates and exit (no other inputs needed).
 - `--dmr-id <your_ID>`: Your personal DMR ID (number). Adds a `radio_id_list.csv` file for private calls to your ID.
 
@@ -206,6 +210,7 @@ Import these into Anytone CPS. If errors, check console for warnings (e.g., name
     --talkgroups-csv "./Templates/TalkGroups_template.csv" /
     --nicknames prefix /
     --sorting analog_and_others_first /
+    --talkgroup-sort name /
     --dmr-id <dmr-id>
     ```
 
