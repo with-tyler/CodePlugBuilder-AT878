@@ -158,7 +158,44 @@ A list of DMR talkgroups used in digital channels.
 
 Run `python main.py --help` for a list. Required unless generating templates: Provide paths to the four input CSV files.
 
-(See full list in original text. It’s the same as above — for brevity, not repeating here.)
+```shell
+usage: main.py [-h] [--analog-csv ANALOG_CSV] [--digital-others-csv DIGITAL_OTHERS_CSV] [--digital-repeaters-csv DIGITAL_REPEATERS_CSV] [--talkgroups-csv TALKGROUPS_CSV] [--output-directory OUTPUT_DIRECTORY]
+               [--config CONFIG] [--radio-config RADIO_CONFIG] [--radio-id RADIO_ID] [--verify-defaults] [--sorting {alpha,repeaters-first,analog-first,analog_and_others_first}]
+               [--hotspot-tx-permit {always,same-color-code}] [--nicknames {off,prefix,suffix,prefix-forced,suffix-forced}] [--talkgroup-sort {input,id,name}] [--generate-templates] [--dmr-id DMR_ID]
+
+Anytone Config Builder
+
+This script generates CSV files for Anytone CPS from input CSV files.
+Use --generate-templates to create example CSV files with headers.
+
+options:
+  -h, --help            show this help message and exit
+  --analog-csv ANALOG_CSV
+                        Path to Analog.csv (analog channels). Required unless --generate-templates is used.
+  --digital-others-csv DIGITAL_OTHERS_CSV
+                        Path to Digital-Others.csv (DMR simplex, hotspots). Required unless --generate-templates is used.
+  --digital-repeaters-csv DIGITAL_REPEATERS_CSV
+                        Path to Digital-Repeaters.csv (DMR repeaters). Required unless --generate-templates is used.
+  --talkgroups-csv TALKGROUPS_CSV
+                        Path to TalkGroups.csv (talkgroup names and IDs). Required unless --generate-templates is used.
+  --output-directory OUTPUT_DIRECTORY
+                        Directory for output CSV files. Defaults to ./Output.
+  --config CONFIG       Directory containing radio.yml. Defaults to "config".
+  --radio-config RADIO_CONFIG
+                        Path to radio configuration YAML file. Defaults to config/radio.yml.
+  --radio-id RADIO_ID   Radio ID to select configuration for. Default: 1
+  --verify-defaults     Verify the radio configuration file and exit.
+  --sorting {alpha,repeaters-first,analog-first,analog_and_others_first}
+                        Zone sorting mode. Default: alpha
+  --hotspot-tx-permit {always,same-color-code}
+                        TX Permit for hotspots. Default: same-color-code
+  --nicknames {off,prefix,suffix,prefix-forced,suffix-forced}
+                        Nickname mode for channel names. Default: off
+  --talkgroup-sort {input,id,name}
+                        Talkgroup sorting mode. Default: input
+  --generate-templates  Generate empty CSV templates with headers in ./Templates and exit.
+  --dmr-id DMR_ID       Your DMR ID to generate radio_id_list.csv.
+```
 
 ## Output Files
 
